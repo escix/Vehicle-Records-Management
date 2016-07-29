@@ -1,0 +1,37 @@
+body {
+	 background: #BABCF4;
+	 font-family: arial, helvetica, sans-serif;
+	 font-size: 12pt;
+	 color: #000000 ;
+	 scrollbar-face-color: #585BA5;
+	 scrollbar-arrow-color: #FFFFFF;
+	 scrollbar-track-color: #585BA5;
+	 scrollbar-3dlight-color: #FFFFFF;
+	 scrollbar-highlight-color: #585BA5;
+	 scrollbar-darkshadow-color: #FFFFFF;
+}
+a { font-family: arial, helvetica, sans-serif; color: #000000 ; text-decoration: none ;font-size: 12pt}
+a:link { font-family: arial, helvetica, sans-serif; color: #000000 ; font-size: 12; }
+#a:link { font-family: arial, helvetica, sans-serif; color: #C00035 ; font-size: 10; }
+a:visited { font-family: arial, helvetica, sans-serif; color: #C00035 ; font-size: 12; }
+a:hover { font-family: arial, helvetica, sans-serif; color: #ffffff ; font-size: 12; text-decoration: none; background: #DE6271 }
+a.button1:link { font-family: arial, helvetica, sans-serif; color: #ffffff ; text-decoration: none ; background: #585BA5; font-weight: bold; font-size: 12pt}
+a.button1:visited { font-family: arial, helvetica, sans-serif; color: #ffffff ; text-decoration: none ; font-weight: bold; background: #585BA5; font-size: 12pt}
+a.button1:hover { font-family: arial, helvetica, sans-serif; color: #ffffff ; text-decoration: none ; font-weight: bold; background: #DE6271; font-size: 12pt}
+a.button2:link { font-family: arial, helvetica, sans-serif; color: #ffffff ; text-decoration: none ; background: #585BA5; font-size: 12pt; }
+a.button2:visited { font-family: arial, helvetica, sans-serif; color: #ffffff ; text-decoration: none ; background: #585BA5; font-size: 12pt; }
+a.button2:hover { font-family: arial, helvetica, sans-serif; color: #ffffff ; text-decoration: none ; background: #DE6271; font-size: 12pt; }
+p.header1 {font-family: arial, helvetica, sans-serif; color: #ffffff; font-size: 24; background: #353A90; padding: 5px;}
+p.header2 {font-family: arial, helvetica, sans-serif; color: #ffffff; font-size: 12; font-weight: bold; background: #353A90; padding: 5px;}
+p.header8 {font-family: arial, helvetica, sans-serif; color: #000000; font-size: 12; font-weight: bold; background: #FFFFFF; padding: 5px;}
+a.header2 {font-family: arial, helvetica, sans-serif; color: #353A90; font-size: 14; font-weight: bold;}
+tr.header3 {font-family: arial, helvetica, sans-serif; color: #ffffff; font-size: 13; background: #353A90; padding: 5px; font-weight: bold}
+tr.header4 {font-family: arial, helvetica, sans-serif;color: #000000; background: #FFFFFF; font-size: 16; font-weight: bold;}
+td {font-size: 10pt }
+td.header1 {font-family: arial, helvetica, sans-serif; color: #ffffff; font-size: 12; font-weight: bold; background: #353A90; paddin
+g: 5px;}
+tr.band {background: #CFD0FF; font-size: 10;}
+.selectRow { color: #ffffff ; background: #DE6271 }
+#butt {background:#585BA5; color:rgb(255,255,255);font-color: #FFFFFF;}
+
+td.spinbox {background: #353A90;}

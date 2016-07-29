@@ -1,0 +1,104 @@
+Vehicle Service Tracker
+v2.1.0
+Written by: 73blazer@snyderworld.org (Snyder, Kenneth J.) 19March2006
+
+-----------------------------------------------------------------------
+// Copyright (c) 2006 Kenneth J. Snyder
+// Licensed under the GNU GPL. For full terms see the file LICENSE
+-----------------------------------------------------------------------
+
+
+
+PREQUSITES FOR TRACKER OPERATION:
+
+- Webserver with PHP
+   (PHP must have been compiled with db2 support --with-ibm-db2 )
+  Tested webservers: Apache 2.0.53 
+  PHP Level 5.0.4 (no reason it shouldn't work on PHP4,
+   but haven't tested)
+  Sorry, no MySQL yet, but I plan it. I do ue the odbc calls, so
+  I think, from what I read, that only the connect statment differs
+  and all the rest of the database calls are ok? Not sure, but I think.
+
+- DB2 V7.1 or above (any marketing package eg UDB, Personal ..etc)
+
+- ImageMagick 5.4.2 or above (from  http://www.imagemagick.org )
+
+- Any UNIX Operating system (Sorry, no windows..perhaps in the future)
+  (What doesn't work on windows you ask, there's a few shell calls
+   for image convert and one other for version, simple enough to 
+   case out but havn't done it, there's propably more than that as
+   well, I've never used PHP on windows, so I don't know)
+   - For clarity sake, I've only tested this on AIX V5.3ML04, but
+     I really see no reason it shouldn't run out of the box on any 
+     UNIX OS.
+
+-----------------------------------------------------------------------
+INSTALLATION STEPS
+
+Step 0:
+ Read the license agreement in the LICENSE file
+
+Step 1:
+  Untar the package somewhere in your webspace
+
+
+
+Step 2:
+  Database setup
+  You'll find everything you need in dbschema directory
+  Edit the create_tables.clp and triggers.clp for proper 
+    database name (ie connect to wwwdb), 
+    tablespace name (ie IN WWW)
+      (if you have a tbsp, if not get rid of the IN clauses)
+
+  Once every name in there looks right, run them
+  db2 -tf create_tables.clp
+  db2 -tf triggers.clp
+
+  Of course you need proper authority on the database.
+  I ran all these as full db2 instance owner.
+
+  If you want the demo subset of data imported,
+  run import_demodata.sh. This is sample data 
+  User demo is always authorized in the code
+  and reads and edits this set of data.
+  If you choose not to import the demo data,
+  feel free to delete the goofy named
+  jpegs in the pics directory (Setup in step 3)
+  !!!But don't delete car.jpg!!!! It's the default
+  thumbnail used until a user uploads their own
+  vehicle pictures.
+
+
+
+Step 3:
+  VST Setup
+  edit config.php for it's parameters. 
+  They are all be explained in config.php file
+
+
+
+Step 4:
+  Ensure "convert" (Imagemagick) is in the webserver user's path
+  (so whoever the webserver runs as (like user nobdoy), make
+  sure he can execute the convert command)
+
+
+Step 5:
+  You probably want to edit VSTInfo.php for whatever you want
+  to say. I think I left some machine and site stats in there
+
+Step 6:
+  Try it out! If you imported the demo data, logon as demo/demo,
+  otherwise you'll need to register yourself first.
+
+
+
+-----------------------------------------------------------------------
+Problems, questions, feedback (good or bad)
+Please, eMail me:
+73blazer@snyderworld.org
+
+Enjoy!
+Ken

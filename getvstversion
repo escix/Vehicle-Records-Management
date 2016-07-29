@@ -1,0 +1,19 @@
+#!/bin/sh
+#==========================================================================
+# getvstversion
+#
+# Shell script spits out the Vehicle Service Tracker Version number
+#
+# Copyright (c) 2006 Kenneth J. Snyder
+# Licensed under the GNU GPL. For full terms see the file LICENSE
+# -------------------------------------------------------------------------
+#
+# Created: 10Mar2006 Snyder, Kenneth J. 73blazer@snyderworld.org 
+#
+# Revised: 
+#
+#==========================================================================
+
+# Spit out the Vehicle Service Tracker Version number
+echo "2.1.0"
+exit 0
