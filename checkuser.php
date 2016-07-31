@@ -71,7 +71,7 @@ if   ($SelectLoginResult){
      if ( ! $DBPASSWD ) {
        $dbconn->commit();
        $dbconn->close();
-      header("Location:"); // index.php?rc=10");
+      header("Location: index.php?rc=10");
       } elseif ($DBPASSWD==$PASSWD) {
        $SID=md5(uniqid(rand(),TRUE));
        $SIDUpdate="update clients set SID='$SID',";

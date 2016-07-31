@@ -1,4 +1,5 @@
 <?php
+session_start();
 //==========================================================================
 // logout.php
 //
@@ -14,19 +15,21 @@
 //
 //==========================================================================
 
-if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
-if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
+if (isset($_SESSION['SID'])) { $SID=$_SESSION['SID']; }
+if (isset($_SESSION['USERNAME'])) { $USERNAME=$_SESSION['USERNAME'];}
 include_once("includes.php");
-$dbconn = odbc_connect("$dbname","$dbuid","$dbpasswd");
-if ($dbconn==0) {
-   $a = odbc_errormsg("DB2 Connect Failed. DB2 might not be running");
+
+$dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname);
+if (!$dbconn) {
+   $a = "Mysql Connect Failed. MySQL might not be running";
    echo($a);
  } else {
+
    authuser($dbconn,$USERNAME,$SID);
 
 
 $LogoutUpdate="update clients set SID='LOGGEDOUT' where USRNAME='$USERNAME'";
-$dbconn->$LogoutUpdate();
+$dbconn->query($LogoutUpdate);
 $header="Location: ".$homepage.$webpath;
 header($header);
 

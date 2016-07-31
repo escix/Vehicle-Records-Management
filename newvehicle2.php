@@ -1,4 +1,5 @@
 <?php
+session_start();
 //==========================================================================
 // newvehicle.php
 //
@@ -19,7 +20,7 @@
 
 <html>
 <?php 
-if ( isset($_REQUEST['EDIT']) || isset($_REQUEST['ADDOREDIT'])) {
+if ( isset($_GET['EDIT']) || isset($_GET['ADDOREDIT'])) {
   echo "<title>Vehicle Service Tracker - Edit a Vehicle</title>";
  } else {
   echo "<title>Vehicle Service Tracker - Add a Vehicle</title>";
@@ -29,22 +30,15 @@ if ( isset($_REQUEST['EDIT']) || isset($_REQUEST['ADDOREDIT'])) {
 <body>
 <?php
 
-session_start();
-
-//if (!isset($SID)) { $_SESSION['SID']=$_REQUEST['SID']; }
-$SID=$_REQUEST['SID'];
-
-//if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
-//$_SESSION['USERNAME']=$USERNAME;
+//if (!isset($SID)) { $SID=$_GET['SID']; }
+//if (!isset($USERNAME)) {$USERNAME=$_GET['USERNAME'];}
 $USERNAME=$_SESSION['USERNAME'];
-
-//if (isset($_REQUEST['PASSWD'])) { $PASSWD=$_REQUEST['PASSWD'];} else { $PASSWD=""; }
-//$_SESSION['PASSWD']=$PASSWD;
+$SID=$_SESSION['SID'];
 $PASSWD=$_SESSION['PASSWD'];
 
-//echo $USERNAME;
-//echo $PASSWD ;
-//echo $SID;
+echo $USERNAME;
+echo $PASSWD ;
+echo $SID;
 include_once("includes.php");
 
 $dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname);
@@ -72,25 +66,25 @@ if (!$dbconn) {
   <b><CENTER>Please Enter the following information about the Vehicle</CENTER></b>
   <form enctype="multipart/form-data" method=post action=newvehicle.php>
   <CENTER>
-  <table width=100% cellpadding='2'><tr><td rowspan=8 width=30%><img src='<?php echo $_GET['$IMAGE'] ?>'>
+  <table width=100% cellpadding='2'><tr><td rowspan=8 width=30%><img src='<?php echo $_GET['IMAGE'] ?>'>
   </td></tr>
   <tr><td align='right'><B>VIN</B></td><td>
   <input name=VIN type=text size=20 maxlength=18 value='<?php echo $_GET['VIN'] ?>'>
   </td></tr>
   <tr><td align='right'><B>Year</B></td><td>
-  <input name="YEAR" type="text" maxlength=4 size="4" value='<?php echo $YEAR?>'>
+  <input name="YEAR" type="text" maxlength=4 size="4" value='<?php echo $_GET['YEAR']?>'>
   </td></tr>
   <tr><td align='right'><B>Make</B></td><td>
-  <input name=MAKE type=text size=20 maxlength='20' value='<?php echo $MAKE?>'>
+  <input name=MAKE type=text size=20 maxlength='20' value='<?php echo $_GET['MAKE']?>'>
   </td></tr>
   <tr><td align='right'><B>Model</B></td><td>
-  <input name=MODEL type=text size=30 maxlength='40' value='<?php echo $MODEL?>'>
+  <input name=MODEL type=text size=30 maxlength='40' value='<?php echo $_GET['MODEL']?>'>
   </td></tr>
   <tr><td align='right'><B>Color</B></td><td>
-  <input name=COLOR type=text size=25 maxlength='25' value='<?php echo $COLOR?>'>
+  <input name=COLOR type=text size=25 maxlength='25' value='<?php echo $_GET['COLOR']?>'>
   </td></tr>
   <tr><td align='right'><B>Gas Mileage</td><td></B>
-  <input name=GAS type=text size=5 value='<?php echo $GAS?>'>
+  <input name=GAS type=text size=5 value='<?php echo $_GET['GAS']?>'>
   <input type="radio" name="EORM" value="E" checked> Miles/Gallon
   <input type="radio" name="EORM" value="M"> Litres/100 Kilometers</B>
   </td></tr>
@@ -120,9 +114,9 @@ if (!$dbconn) {
   <p>
   <input name=SID type=hidden value=$SID>
   <input name=USERNAME type=hidden value=$USERNAME>
-  <input name=OLDVIN type=hidden value='<?php echo $_POST['$OLDVIN'] ?>'>
-  <input name=AorE type=hidden value='<?php echo $_POST['$AorE'] ?>'>
-  <input name=OLDIMG type=hidden value='<?php echo $_POST['$IMAGE'] ?>'>
+  <input name=OLDVIN type=hidden value='<?php echo $OLDVIN ?>'>
+  <input name=AorE type=hidden value='<?php echo $AorE ?>'>
+  <input name=OLDIMG type=hidden value='<?php echo $IMAGE ?>'>
   <CENTER>
   <B>
   <B>You can have an image of your Vehicle.<BR>
@@ -153,8 +147,8 @@ $GAS=$_POST['GAS'];
 $EORM=$_POST['EORM'];
 $MORK=$_POST['MORK'];
 $GORD=$_POST['GORD'];
-//$SID=$SID;
-//$USERNAME=$USERNAME;
+//$SID=$_GET['SID'];
+//$USERNAME=$GET['USERNAME'];
 $OLDVIN=$_POST['OLDVIN'];
 $AorE=$_POST['AorE'];
 $OLDIMG=$_POST['OLDIMG'];
@@ -162,12 +156,12 @@ $OLDIMG=$_POST['OLDIMG'];
 
  
    echo "<CENTER><p class='Header1'>";
-   if ( isset($_REQUEST['EDIT']) || isset($_REQUEST['ADDOREDIT'])) {
+   if ( isset($_GET['EDIT']) || isset($_GET['ADDOREDIT'])) {
       echo "<B>Vehicle Service Tracker - Edit a Vehicle</B></p></CENTER>";
      } else {
       echo "<B>Vehicle Service Tracker - Add a Vehicle</B></p></CENTER>";
    }  
-   if (isset($_REQUEST['ADDOREDIT'])) {
+   if (isset($_GET['ADDOREDIT'])) {
      // Ok..they submitted something..let's check it
      // ---------------------------------------------
      $VIN=strtoupper($VIN);
@@ -368,4 +362,3 @@ footer($PHP_SELF,$adminemail);
 
 } // if authorized to view this page
 ?>
-

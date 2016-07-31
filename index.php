@@ -69,11 +69,6 @@
    <hr noshade size=5 width=90% >
    <center><a href="VSTInfo.php">What is This?</a> | <a href="register.php">Register Now!</a> | 
    <a href="<?php echo $homepage ?>"> <?php echo $orgname ?></a>
-   | <a href="http://www.snyderworld.org/VehicleServiceTracker">VST Project Page</a>
-   | <a href="http://sourceforge.net/tracker/?func=add&group_id=163275&atid=827102">
-     Submit a Feature Request</a>
-   | <a href="http://sourceforge.net/tracker/?func=add&group_id=163275&atid=827099">
-     Submit a Bug</a> 
    </center><hr noshade size=5 width=90% >
 <?php footer($_SERVER['PHP_SELF'],$adminemail); ?>
  </body>

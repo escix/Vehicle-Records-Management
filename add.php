@@ -1,4 +1,5 @@
 <?php
+session_start();
 //==========================================================================
 // add.php
 //
@@ -21,18 +22,29 @@
 <body>
 <?php
 
-if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
-if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
+//if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
+//if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
 include_once("includes.php");
 
-$dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname); //odbc_connect("$dbname","$dbuid","$dbpasswd");
+$SID=$_SESSION['SID'];
+$USERNAME=$_SESSION['USERNAME'];
+$VIN =$_POST['VIN'];
+$MAKE =$_POST['MAKE'];
+$MODEL =$_POST['MODEL'];
+$COLOR =$_POST['COLOR'];
+$YEAR =$_POST['YEAR'];
+$MORK =$_POST['MORK'];
+$GORD =$_POST['GORD'];
+$IMAGE =$_POST['IMAGE'];
+$GASMILE=$_POST['GASMILE'];
+$add=$_POST['add'];
+$dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname);
 if (!$dbconn) {
    $a = "Mysql Connect Failed. MySQL might not be running";
    echo($a);
  } else {
 
    authuser($dbconn,$USERNAME,$SID);
-
 
    function NewROForm ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
                     $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC) {
@@ -47,7 +59,7 @@ if (!$dbconn) {
      echo "</b></td><td>";
      echo "<input name=DESC type=text size=60 maxlength=75 value=\"$DESC\">";
      echo "</td></tr>";
-     echo "<input name=VIN type=hidden value=$VIN>";
+     echo "<input name=VIN type=text value=$VIN>";
      echo "<input name=YEAR type=hidden value=$YEAR>";
      echo "<input name=MAKE type=hidden value=\"$MAKE\">";
      echo "<input name=MODEL type=hidden value=\"$MODEL\">";
@@ -72,6 +84,7 @@ if (!$dbconn) {
    echo "<title>Vehicle Service Tracker - Add A New Repair Order</title>";
    echo "<B>Vehicle Service Tracker - Add A New Repair Order</B></p></center>";
 
+
    if (isset($add)) {
       titleBar ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
                     $GASMILE,$IMAGE,$GORD,$MORK);
@@ -79,14 +92,16 @@ if (!$dbconn) {
                     $GASMILE,$IMAGE,$GORD,$MORK,"","");
     } else {
       // Ok the user is trying to create a brand new RO..lets check his input
-      $LastODOSelect="select MILEAGE from VST.SERVICEHIST where VEHICLE='$VIN' ";
-      $LastODOSelect.="order by MILEAGE DESC fetch first row only";
-      $LastODOResult=odbc_exec($dbconn,$LastODOSelect);
+      $LastODOSelect="select MILEAGE from servicehist where VEHICLE='$VIN' ";
+      $LastODOSelect.="order by MILEAGE DESC";
+      $LastODOResult=$dbconn->query($LastODOSelect);
       if (! $LastODOResult ) die("Something went wrong with select last mileage");
-      odbc_fetch_row($LastODOResult);
-      $LastODO=odbc_result($LastODOResult,1);
+      $row=mysqli_fetch_row($LastODOResult);
+      $LastODO=$row[0];
       if ( $LastODO=="" ) $LastODO=0;
 
+$ODO=$_POST['ODO'];
+$DESC=$_POST['DESC'];
       if ( $ODO=="" ) {
          if (!isset($UIErrors)) $UIErrors="";
          $UIErrors.="<b><ul><li><font color=#ff0000>";
@@ -126,14 +141,14 @@ if (!$dbconn) {
         // Strip off any tenths of odometer reading entered
         $ODO=intval($ODO);
         //Build the insert
-        $MyInsert="insert into SERVICEHIST ";
+        $MyInsert="insert into servicehist ";
         $MyInsert.="(repair_order,vehicle,service_date,mileage,service_short) values ('";
         $MyInsert.=$NRONum."','".$VIN."',current_timestamp,".$ODO.",'".$DESC."');";
-        echo $MyInsert;
+//        echo $MyInsert;
  
         // Perform the insert and redirect or die
-        if ($dbconn->$MyInsert()) {
-           $dbconn->commin();
+        if ($dbconn->query($MyInsert)) {
+           $dbconn->commit();
            $dbconn->close();
            $LIHeader="Location: addli.php?SID=$SID&USERNAME=$USERNAME&RO=$NRONum&FromNewRO=0";
            $LIHeader.="&ODO=$ODO&VIN=$VIN&YEAR=$YEAR&MAKE=$MAKE&MODEL=$MODEL&COLOR=$COLOR";

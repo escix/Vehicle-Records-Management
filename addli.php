@@ -1,4 +1,6 @@
+
 <?php
+session_start();
 //==========================================================================
 // addli.php
 //
@@ -20,7 +22,42 @@
  </head>
 <link rel='stylesheet' type='text/css' href='vst.css'>
 <body>
+
 <?php
+
+
+if (!$SID)($SID=$_SESSION['SID']);
+if (!$USERNAME)($USERNAME=$_SESSION['USERNAME']);
+if (!$VIN) {$VIN =$_REQUEST['VIN'];}
+if (!$MAKE){$MAKE =$_REQUEST['MAKE'];} 
+if (!$MODEL){$MODEL =$_REQUEST['MODEL'];}
+if (!$COLOR){$COLOR =$_REQUEST['COLOR'];}
+if (!$YEAR){$YEAR =$_REQUEST['YEAR'];} 
+if (!$MORK){$MORK =$_REQUEST['MORK'];}
+if (!$GORD){$GORD =$_REQUEST['GORD'];}
+if (!$IMAGE){$IMAGE =$_REQUEST['IMAGE'];}
+if (!$IMAGE){$IMAGE =$_REQUEST['IMAGE'];}
+if (!$RO){$RO =$_REQUEST['RO'];}
+if (!$GASMILE){$GASMILE =$_REQUEST['GASMILE'];}
+//if (!$FromNewRO){$FromNewRO =$_REQUEST['FromNewRO'];}
+
+//$MAKE =$_GET['MAKE'];
+//$MODEL =$_GET['MODEL'];
+//$COLOR =$_GET['COLOR'];
+//$YEAR =$_GET['YEAR'];
+//$MORK =$_GET['MORK'];
+//$GORD =$_GET['GORD'];
+//$IMAGE =$_GET['IMAGE'];
+//$GASMILE=$_GET['GASMILE'];
+//$RO=$_GET['RO'];
+//$FromNewRO=$_GET['FromNewRO'];
+
+
+
+
+
+
+
 setlocale(LC_MONETARY, 'en_US');
 
 
@@ -48,6 +85,7 @@ if ($PART_NUMBER) { $PART_NUMBER=ReDisplayFormData ($PART_NUMBER); }
 ?>
 
 <form method=post action=addli.php>
+
 <table cellpadding='2' width=90%>
 <tr><td rowspan=6>
   <img src="<?php echo $IMAGE ?>">
@@ -72,6 +110,7 @@ if ($PART_NUMBER) { $PART_NUMBER=ReDisplayFormData ($PART_NUMBER); }
        echo "NA>";
      }
      ?>
+
   </td><td rowspan=5>
     <b>Notes </b>
     <textarea name=NOTES rows=4 cols=40><?php if ($NOTES) { echo $NOTES; } ?></textarea>
@@ -89,6 +128,8 @@ if ($PART_NUMBER) { $PART_NUMBER=ReDisplayFormData ($PART_NUMBER); }
      }
 
      ?>
+
+
   </td></tr>
 <tr><td>
      <b>Cost<b>
@@ -138,11 +179,11 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME) {
   echo number_format($ODO);
   echo "$MorkSuffix</TD></TR>";
   echo "</TABLE>";
-  $SROSelect="select REPAIR_ORDER_INDEX,DATE(LINE_DATE),OPERATION,";
+  $SROSelect="select REPAIR_ORDER_INDEX,LINE_DATE,OPERATION,";
   $SROSelect.="SOURCE,PART_NUMBER,COST,HOURS,NOTES,LINE_INDEX ";
-  $SROSelect.="FROM vst.SERVICELINE where REPAIR_ORDER=";
-  $SROSelect.="'$RO' ORDER BY REPAIR_ORDER_INDEX ASC  FOR FETCH ONLY";
-  $SROResult=odbc_exec($dbconn,$SROSelect);
+  $SROSelect.="FROM serviceline where REPAIR_ORDER=";
+  $SROSelect.="'$RO' ORDER BY REPAIR_ORDER_INDEX ASC";
+  $SROResult=$dbconn->query($SROSelect);
   echo "<TABLE WIDTH='95%'>";
   echo "<TR>";
   echo "<TD class='header1'>Item</TD>";
@@ -158,13 +199,13 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME) {
 
   $numLines=0;
   $AlreadyPutFunction=0;
-  while (odbc_fetch_row($SROResult)) {
+  while ($SRO=mysqli_fetch_row($SROResult)) {
     $numLines++;
     if ($numLines %2 == 0) { echo "<TR class='band'>"; } else { echo "<TR>"; }
     echo "<TD>";
-    echo odbc_result($SROResult,1);
+    echo $SRO[0];
     //$NOTES=nl2br(odbc_result($SROResult,8));
-    $NOTES=odbc_result($SROResult,8);
+    $NOTES=$SRO[7];
     if ($NOTES!="") {
       $NOTES.="ANEWLINEANEWLINE";
       if ($AlreadyPutFunction==0) {
@@ -195,20 +236,20 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME) {
       echo "</noscript>";
     }
     echo "</TD><TD>";
-    echo odbc_result($SROResult,2);
+    echo $SRO[1];
     echo "</TD><TD>";
-    echo odbc_result($SROResult,3);
+    echo $SRO[2];
     echo "</TD><TD>";
-    echo odbc_result($SROResult,4);
+    echo $SRO[3];
     echo "</TD><TD>";
-    echo odbc_result($SROResult,5);
+    echo $SRO[4];
     echo "</TD><TD>";
-    echo money_format('%n',odbc_result($SROResult,6));
+    echo money_format('%n',$SRO[5]);
     echo "</TD><TD>";
-    echo odbc_result($SROResult,7);
+    echo $SRO[6];
     echo "</TD></TR>";
-    $TotalROCost=$TotalROCost+odbc_result($SROResult,6);
-    $TotalROHours=$TotalROHours+odbc_result($SROResult,7);
+    $TotalROCost=$TotalROCost+$SRO[5];
+    $TotalROHours=$TotalROHours+$SRO[6];
   } // while (odbc_fetch_row($SROResult)) (for each line item)
   echo "</TABLE>";
   echo "<TABLE WIDTH='95%'><TR>";
@@ -222,18 +263,25 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME) {
 } // ShowHistory
 
 
-if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
-if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
+//if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
+//if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
+
 include_once("includes.php");
-$dbconn = odbc_connect("$dbname","$dbuid","$dbpasswd");
-if ($dbconn==0) {
-   $a = odbc_errormsg("DB2 Connect Failed. DB2 might not be running");
+
+$dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname);
+if (!$dbconn) {
+   $a = "Mysql Connect Failed. MySQL might not be running";
    echo($a);
  } else {
+
    authuser($dbconn,$USERNAME,$SID);
    echo "<center><p class='Header1'>";
    echo "<title>Vehicle Service Tracker - Add Line Items</title>";
    echo "<B>Vehicle Service Tracker - Add Repair Order Line Items</B></p></center>";
+
+$FromNewRO=$_REQUEST['FromNewRO'];
+
+
 
    if (isset($FromNewRO)) {
       titleBar ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
@@ -269,6 +317,13 @@ if ($dbconn==0) {
  
     } else {
       // Ok the user is trying to create a brand new RO..lets check his input
+
+$COST=$_POST['COST'];
+$HOURS=$_POST['HOURS'];
+$OPERATION=$_POST['OPERATION'];
+$PART_NUMBER=$_POST['PART_NUMBER'];
+$SOURCE=$_POST['SOURCE'];
+
 
       if ( $COST=="" ) {
          if (!isset($UIErrors)) $UIErrors="";
@@ -338,18 +393,14 @@ if ($dbconn==0) {
         $OPERATION2=str_replace("'","''",$OPERATION);
         $SOURCE2=str_replace("'","''",$SOURCE);
         $PART_NUMBER2=str_replace("'","''",$PART_NUMBER);
-        $MyInsert="insert into VST.SERVICELINE ";
+        $MyInsert="insert into serviceline ";
         $MyInsert.="(REPAIR_ORDER,LINE_DATE,OPERATION,SOURCE,PART_NUMBER,";
         $MyInsert.="COST,HOURS,NOTES) values (";
         $MyInsert.="'$RO',current_timestamp,'$OPERATION2','$SOURCE2','$PART_NUMBER2'";
         $MyInsert.=",$COST,$HOURS,'$NOTES')";
-        //echo $MyInsert;
  
         //Perform the insert and redirect or die
-        if (odbc_exec($dbconn,$MyInsert)) {
-           //odbc_commit($dbconn);
-           //odbc_close_all();
-           //die ("Insert OK!");
+        if ($dbconn->query($MyInsert)) {
            titleBar ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
                     $GASMILE,$IMAGE,$GORD,$MORK);
            NewLIForm ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
@@ -377,8 +428,8 @@ if ($dbconn==0) {
          
            //header("Location: addli.php?SID=$SID&USERNAME=$USERNAME&RO=$RO");
          } else {
-           odbc_commit($dbconn);
-           odbc_close_all();
+           $dbconn->commit();
+           $dbconn->close();
            die ("Something went wrong with line item insert.");
         }
 
@@ -389,7 +440,7 @@ if ($dbconn==0) {
 
 
 } // if authorized to view this page
-odbc_commit($dbconn);
-odbc_close_all();
+$dbconn->commit();
+$dbconn->close();
 
 ?>

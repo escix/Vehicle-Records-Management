@@ -23,12 +23,12 @@ session_start();
 
 
 
-if (isset($_REQUEST['SID'])) { $_SESSION['SID']=$_REQUEST['SID']; }
+//if (isset($_REQUEST['SID'])) { $_SESSION['SID']=$_REQUEST['SID']; }
 //if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
 
 $SID=$_SESSION['SID'];
 $USERNAME=$_SESSION['USERNAME'];
-
+$PASSWD=$_SESSION['PASSWD'];
 
 
 include_once("includes.php");
@@ -41,6 +41,7 @@ if (!$dbconn) {
 
    authuser($dbconn,$USERNAME,$SID);
    setlocale(LC_MONETARY, 'en_US');
+
    function showaddsr ($USERNAME,$SID,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,$MORK,$GORD,$IMAGE,$GASMILE) {
     //echo "<CENTER>";
     echo "<table cellpadding='0'><tr><td>";
@@ -132,16 +133,15 @@ while ($rows=mysqli_fetch_assoc($VehiclesResult)) {
    $Vehicles++;
  } // for every row
 
-mysqli_free_result($VehiclesResault);
+mysqli_free_result($VehiclesResult);
 
  if ($Vehicles==0) {
    echo "You have no vehicles. Add some!";
   } else {
 
-echo "lk";
-echo $VINS[0];
-echo $VINS[1];
-echo "ol";
+//echo $USERNAME;
+//echo $PASSWD;
+//echo $SID;
    echo "<CENTER>";
    echo "<TABLE WIDTH='90%' CELLPADDING=2 CELLSPACING=1 BORDER=0>\n";
 
@@ -170,6 +170,7 @@ echo "ol";
      echo "<small> [ edit vehicle ] </small></A>";
      echo "<BR>Vehicle Added: $CCREATES[$y] ";
      echo "<BR>";
+
      showaddsr($USERNAME,$SID,$VINS[$y],$YEARS[$y],$MAKES[$y],
                   $MODELS[$y],$COLORS[$y],$MORK[$y],$GORDS[$y],$IMAGES[$y],$GASMILES[$y]);
      echo "</TD>";

@@ -1,4 +1,5 @@
 <?php
+session_start();
 //==========================================================================
 // showhistory.php
 //
@@ -24,6 +25,22 @@
 </head>
 
 <?php
+
+if (!$_SESSION['SID']){$SID=$_REQUEST['SID'];}
+//echo $SID;
+$USERNAME=$_SESSION['USERNAME'];
+$VIN =$_POST['VIN'];
+$MAKE =$_POST['MAKE'];
+$MODEL =$_POST['MODEL'];
+$COLOR =$_POST['COLOR'];
+$YEAR =$_POST['YEAR'];
+$MORK =$_POST['MORK'];
+$GORD =$_POST['GORD'];
+$IMAGE =$_POST['IMAGE'];
+$GASMILE=$_POST['GASMILE'];
+$RO=$_POST['RO'];
+$FromNewRO=$_POST['FromNewRO'];
+
  $mtime = microtime();
  $mtime = explode(" ",$mtime);
  $mtime = $mtime[1] + $mtime[0];
@@ -41,12 +58,15 @@ function db2ts2int( $ts )
 }
 
 setlocale(LC_MONETARY, 'en_US');
-if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
-if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
+if (isset($SID)) { $SID=$_SESSION['SID']; }
+if (isset($USERNAME)) { $USERNAME=$_SESSION['USERNAME'];}
 include_once("includes.php");
-$dbconn = odbc_connect("$dbname","$dbuid","$dbpasswd");
-if ($dbconn==0) {
-   $a = odbc_errormsg("DB2 Connect Failed. DB2 might not be running");
+
+
+
+$dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname);
+if (!$dbconn) {
+   $a = "Mysql Connect Failed. MySQL might not be running";
    echo($a);
  } else {
    authuser($dbconn,$USERNAME,$SID);
@@ -99,17 +119,16 @@ if ($dbconn==0) {
 
     // Get this repair order's details
     // ------------------------------------------------------
-    $ROSelect="select REPAIR_ORDER,date(SERVICE_DATE),MILEAGE,SERVICE_SHORT FROM ";
-    $ROSelect.="vst.SERVICEHIST where VEHICLE='$VIN' ORDER BY MILEAGE DESC ";
-    $ROSelect.="FOR FETCH ONLY";
-    $ROResult=odbc_exec($dbconn,$ROSelect);
+    $ROSelect="select REPAIR_ORDER,SERVICE_DATE,MILEAGE,SERVICE_SHORT FROM ";
+    $ROSelect.="servicehist where VEHICLE='$VIN' ORDER BY MILEAGE DESC ";
+    $ROResult=$dbconn->query($ROSelect);
     $numROS=0;
-    while (odbc_fetch_row($ROResult)) {
+    while ($RORS=mysqli_fetch_row($ROResult)) {
       $numROS++;
-      $ROS[$numROS]     =odbc_result($ROResult,1);
-      $RODATES[$numROS] =odbc_result($ROResult,2);
-      $ODOS[$numROS]    =odbc_result($ROResult,3);
-      $DESCS[$numROS]   =odbc_result($ROResult,4);
+      $ROS[$numROS]     =$RORS[0];
+      $RODATES[$numROS] =$RORS[1];
+      $ODOS[$numROS]    =$RORS[2];
+      $DESCS[$numROS]   =$RORS[3];
       // Set the last odo reading for cost/mile calculations
       if ($numROS==1) { 
         $LastODO=$ODOS[$numROS];
@@ -151,11 +170,11 @@ if ($dbconn==0) {
          echo number_format($ODOS[$key]);
          echo "$MorkSuffix</TD></TR>";
          echo "</TABLE>";
-         $SROSelect="select REPAIR_ORDER_INDEX,DATE(LINE_DATE),OPERATION,";
+         $SROSelect="select REPAIR_ORDER_INDEX,LINE_DATE,OPERATION,";
          $SROSelect.="SOURCE,PART_NUMBER,COST,HOURS,NOTES,LINE_INDEX ";
-         $SROSelect.="FROM vst.SERVICELINE where REPAIR_ORDER=";
-         $SROSelect.="'$ROS[$key]' ORDER BY REPAIR_ORDER_INDEX ASC  FOR FETCH ONLY";
-         $SROResult=odbc_exec($dbconn,$SROSelect);
+         $SROSelect.="FROM serviceline where REPAIR_ORDER=";
+         $SROSelect.="'$ROS[$key]' ORDER BY REPAIR_ORDER_INDEX ASC";
+         $SROResult=$dbconn->query($SROSelect);
          echo "<TABLE WIDTH='95%'>";
          echo "<TR>";
          echo "<TD class='header1'>Item</TD>";
@@ -170,12 +189,12 @@ if ($dbconn==0) {
          $TotalROHours=0;
    
          $numLines=0;
-         while (odbc_fetch_row($SROResult)) {
+         while ($RTO=mysqli_fetch_row($SROResult)) {
            $numLines++;
            if ($numLines %2 == 0) { echo "<TR class='band'>"; } else { echo "<TR>"; }
            echo "<TD>";
-           echo odbc_result($SROResult,1);
-           $NOTES=odbc_result($SROResult,8);
+           echo $RTO[0];
+           $NOTES=$RTO[7];
            if ($NOTES!="") {
                $NOTES.="ANEWLINEANEWLINE";
                echo "<script>document.write(\"<a href='#' onclick=openPopup('";
@@ -185,27 +204,27 @@ if ($dbconn==0) {
 
               echo "<noscript>";
               $TMPURL="notes.php?SID=$SID&USERNAME=$USERNAME&INFO=";
-              $TMPURL.=nl2br(odbc_result($SROResult,8));
+              $TMPURL.=nl2br($RTO[7]);
               echo "&nbsp;";
               echo "<a href='$TMPURL'>[n]</a>";
               echo "</noscript>";
            }
            echo "</TD><TD>";
-           echo odbc_result($SROResult,2);
+           echo $RTO[1];
            echo "</TD><TD>";
-           echo odbc_result($SROResult,3);
+           echo $RTO[2];
            echo "</TD><TD>";
-           echo odbc_result($SROResult,4);
+           echo $RTO[3];
            echo "</TD><TD>";
-           echo odbc_result($SROResult,5);
+           echo $RTO[4];
            echo "</TD><TD>";
-           echo money_format('%n',odbc_result($SROResult,6));
+           echo money_format('%n',$RTO[5]);
            echo "</TD><TD>";
-           echo odbc_result($SROResult,7);
+           echo $RTO[6];
            echo "</TD></TR>";
-           $TotalROCost=$TotalROCost+odbc_result($SROResult,6);
-           $TotalROHours=$TotalROHours+odbc_result($SROResult,7);
-         } // while (odbc_fetch_row($SROResult)) (for each line item)
+           $TotalROCost=$TotalROCost+$RTO[5];
+           $TotalROHours=$TotalROHours+$RTO[6];
+         } // while ($ROT=mysqli_fetch_row($SROResult))
          echo "</TABLE>";
          echo "<TABLE WIDTH='95%'><TR>";
          echo "<TD class=header1>Total Cost: ";
@@ -232,7 +251,7 @@ if ($dbconn==0) {
           // -----------------------------------------
           $AMPY=round(($LastODO-$FirstODO)/$nYears);
           if ($MORK=="K") {
-             $MilesDriven=(($LastODO-$FirstODO)*0.621371192);
+             $MilesDriven=(($LastODO-$FirstODO)*1);
            } else { 
              $MilesDriven=$LastODO-$FirstODO;
           }
@@ -258,13 +277,13 @@ if ($dbconn==0) {
        }
        echo "</TD></TR>";
        echo "<TR class='header3'><TD>";
-       echo "Average Miles Per year Driven";
+       echo "average kms per year driven";
        if ($nYears<1) echo " (Extrapolated)";
        echo "</TD><TD>";
        echo number_format($AMPY);
        echo "</TD></TR>";
        echo "<TR class='header3'><TD>";
-       echo "Cost Per mile to maintain this vehicle (cents/mile)</TD>";
+       echo "Cost per kms to maintain this vehicle (cents/km)</TD>";
        if ($numROS==1) {
           echo "<TD>N/A</TD></TR>";
          } else { 
@@ -275,7 +294,7 @@ if ($dbconn==0) {
        if ($MilesDriven==0) {
           echo "<BR>";
           echo "<B>There is only 1 repair order.<BR>";
-          echo "Cost per mile & Miles Driven can only be ";
+          echo "Cost per km & Kms Driven can only be ";
           echo "calculated if there are at least 2 repair orders.</B><BR>";
        }
    
@@ -283,8 +302,8 @@ if ($dbconn==0) {
        // we do it here so the main page doesn't have to go selecting
        // every line item for every vehicle when it loads
        // -------------------------------------------------------------
-       $UpdateVehicleStats="update vst.VEHICLES set ";
-       $UpdateVehicleStats.="MILESDRIVEN=".round($MilesDriven).",";
+       $UpdateVehicleStats="update vehicles set ";
+       $UpdateVehicleStats.="MILESDRIVEN=$MilesDriven,";
        $UpdateVehicleStats.="COSTPERMILE=$CPM,";
        $UpdateVehicleStats.="TOTALSPENT=$TotalCost,";
        $UpdateVehicleStats.="TOTALHOURS=$TotalHours,";
@@ -292,8 +311,8 @@ if ($dbconn==0) {
        if ($nYears<1) $UpdateVehicleStats.= ",EXAVG='E' ";
        $UpdateVehicleStats.="where VIN='$VIN'";
        //echo "Update stats statment [$UpdateVehicleStats]";
-       odbc_exec($dbconn,$UpdateVehicleStats);
-       odbc_commit($dbconn);
+       $dbconn->query($UpdateVehicleStats);
+       $dbconn->commit();
     } else {
        echo "There are no service records for this vehicle yet. Add some!<BR>";
    } // if there are any repair orders
@@ -301,8 +320,10 @@ if ($dbconn==0) {
    echo "<a href='main.php?SID=$SID&USERNAME=$USERNAME'>Back to Main</a>";
    echo "</B></CENTER>";
 // } // show or add
-odbc_close_all();
+$dbconn->close();
 } // if dbconn
+
+
 
 footer($PHP_SELF,$adminemail);
 
@@ -314,4 +335,8 @@ footer($PHP_SELF,$adminemail);
   echo "<br><br>This page was created in ".$totaltime." seconds";
 
 ?>
+
+
 </html>
+
+
