@@ -26,18 +26,35 @@ session_start();
 //if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
 include_once("includes.php");
 
-$SID=$_SESSION['SID'];
-$USERNAME=$_SESSION['USERNAME'];
-$VIN =$_POST['VIN'];
-$MAKE =$_POST['MAKE'];
-$MODEL =$_POST['MODEL'];
-$COLOR =$_POST['COLOR'];
-$YEAR =$_POST['YEAR'];
-$MORK =$_POST['MORK'];
-$GORD =$_POST['GORD'];
-$IMAGE =$_POST['IMAGE'];
-$GASMILE=$_POST['GASMILE'];
-$add=$_POST['add'];
+
+if (!$SID)($SID=$_SESSION['SID']);
+if (!$USERNAME)($USERNAME=$_SESSION['USERNAME']);
+if (!$VIN) {$VIN =$_REQUEST['VIN'];}
+if (!$MAKE){$MAKE =$_REQUEST['MAKE'];}
+if (!$MODEL){$MODEL =$_REQUEST['MODEL'];}
+if (!$COLOR){$COLOR =$_REQUEST['COLOR'];}
+if (!$YEAR){$YEAR =$_REQUEST['YEAR'];}
+if (!$MORK){$MORK =$_REQUEST['MORK'];}
+if (!$GORD){$GORD =$_REQUEST['GORD'];}
+if (!$IMAGE){$IMAGE =$_REQUEST['IMAGE'];}
+if (!$GASMILE){$GASMILE =$_REQUEST['GASMILE'];}
+if (!$add){$add =$_REQUEST['add'];}
+if (!$RO){$RO =$_REQUEST['RO'];}
+
+
+//$SID=$_SESSION['SID'];
+//$USERNAME=$_SESSION['USERNAME'];
+//$VIN =$_POST['VIN'];
+//$MAKE =$_POST['MAKE'];
+//$MODEL =$_POST['MODEL'];
+//$COLOR =$_POST['COLOR'];
+//$YEAR =$_POST['YEAR'];
+//$MORK =$_POST['MORK'];
+//$GORD =$_POST['GORD'];
+//$IMAGE =$_POST['IMAGE'];
+//$GASMILE=$_POST['GASMILE'];
+//$add=$_POST['add'];
+
 $dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname);
 if (!$dbconn) {
    $a = "Mysql Connect Failed. MySQL might not be running";

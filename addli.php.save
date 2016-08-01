@@ -405,8 +405,9 @@ $DATE_RO = $timestamp;
 
 
 $SRONEWResult= $dbconn->query("select REPAIR_ORDER, COUNT(*) as cnt FROM serviceline WHERE REPAIR_ORDER='$RO'");
-$SRONEWROW=mysqli_fetch_assoc($SRONEWResult);
-$SRONEW=$SRONEWROW['cnt']+1;
+
+$SRONEW=$SRONEW+1;
+//$SRONEW=12;
 
         // Replace any single quote with double single quote for db2 insert
         $OPERATION2=str_replace("'","''",$OPERATION);
