@@ -1,6 +1,14 @@
 
 <?php
+
 session_start();
+
+if(!$_SESSION['user_ok'])
+{header ('location: /index.php');}
+else{}
+
+
+
 //==========================================================================
 // addli.php
 //
@@ -37,25 +45,14 @@ if (!$GORD){$GORD =$_REQUEST['GORD'];}
 if (!$IMAGE){$IMAGE =$_REQUEST['IMAGE'];}
 if (!$IMAGE){$IMAGE =$_REQUEST['IMAGE'];}
 if (!$RO){$RO =$_REQUEST['RO'];} 
+if (!$ODO){$ODO =$_REQUEST['ODO'];} 
+if (!$DESC){$DESC =$_REQUEST['DESC'];} 
+if (!$SERDATE){$SERDATE =$_REQUEST['SERDATE'];} 
 if (!$GASMILE){$GASMILE =$_REQUEST['GASMILE'];}
 $FromNewRO = $_REQUEST['FromNewRO'];
 $EditRO=$_REQUEST['EditRO'];
 
-//$MAKE =$_GET['MAKE'];
-//$MODEL =$_GET['MODEL'];
-//$COLOR =$_GET['COLOR'];
-//$YEAR =$_GET['YEAR'];
-//$MORK =$_GET['MORK'];
-//$GORD =$_GET['GORD'];
-//$IMAGE =$_GET['IMAGE'];
-//$GASMILE=$_GET['GASMILE'];
-//$RO=$_GET['RO'];
-//$FromNewRO=$_GET['FromNewRO'];
-
-
-
-
-
+$SERDATE=date("d M Y",strtotime($SERDATE));
 
 
 setlocale(LC_MONETARY, 'en_US');
@@ -72,7 +69,7 @@ return $Input;
 
 
 function NewLIForm ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
-                    $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$RO,$NOTES,
+                    $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$SERDATE,$RO,$NOTES,
                     $OPERATION,$SOURCE,$PART_NUMBER,$COST,$HOURS) {
 
 // If the objects had single quote, we need to account for
@@ -90,17 +87,6 @@ if ($PART_NUMBER) { $PART_NUMBER=ReDisplayFormData ($PART_NUMBER); }
 <tr><td rowspan=7>
   <img src="<?php echo $IMAGE ?>">
 </td></tr>
-
-<tr><td>
-     <b>Date</b>
-  </td><td colspan=2>
-     <input name=Date type=date size=75 maxlength=75
-     <?php
-     echo "value=$DATE_RO";
-     ?>
-     >
-  </td></tr>
-
 
 <tr><td>
      <b>Operation</b>
@@ -156,6 +142,7 @@ if ($PART_NUMBER) { $PART_NUMBER=ReDisplayFormData ($PART_NUMBER); }
 </table>
 <input name=VIN type=hidden value=<?php echo $VIN ?> >
 <input name=ODO type=hidden value=<?php echo $ODO ?> >
+<input name=SERDATE type=hidden value=<?php echo $SERDATE ?> >
 <input name=YEAR type=hidden value=<?php echo $YEAR ?> >
 <input name=MAKE type=hidden value="<?php echo $MAKE ?> ">
 <input name=MODEL type=hidden value="<?php echo $MODEL ?>">
@@ -180,14 +167,16 @@ if ($PART_NUMBER) { $PART_NUMBER=ReDisplayFormData ($PART_NUMBER); }
 
 } // NewLIForm
 
-function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME) {
+
+function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME, $SERDATE) {
   if ($MORK=="K") {$MorkSuffix=" Kilometers";}else{$MorkSuffix=" Miles";}
   // Get this repair orders line items and display them
   // -------------------------------------------------------
   echo "<CENTER><TABLE width=95%>";
   echo "<TR><TD align=center colspan=2><p class='header8'>$DESC</TD></TR>";
   echo "<TR><TD><P class='header8'>Date: ";
-  echo "$TDATE</TD>";
+  echo $SERDATE;
+  echo "</TD>";
   echo "<TD><p class='header8'>Odometer: ";
   echo number_format($ODO);
   echo "$MorkSuffix</TD></TR>";
@@ -200,7 +189,6 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME) {
   echo "<TABLE WIDTH='95%'>";
   echo "<TR>";
   echo "<TD class='header1'>Item</TD>";
-  echo "<TD class='header1'>Date</TD>";
   echo "<TD class='header1'>Labor Operation</TD>";
   echo "<TD class='header1'>Source</TD>";
   echo "<TD class='header1'>Part Number</TD>";
@@ -219,7 +207,8 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME) {
 	
 //   $SONEW=$SRO[0]+1;
 //      echo $SONEW;
-	echo $numLines;
+	echo $numLines; 
+//	echo "</TD>";
     //$NOTES=nl2br(odbc_result($SROResult,8));
     $NOTES=$SRO[7];
     if ($NOTES!="") {
@@ -251,9 +240,8 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME) {
       echo "<a href='$TMPURL'>[n]</a>";
       echo "</noscript>";
     }
-    echo "</TD><TD>";
-    echo $SRO[1];
-    echo "</TD><TD>";
+	echo "</TD>";
+	echo "<TD>";
     echo $SRO[2];
     echo "</TD><TD>";
     echo $SRO[3];
@@ -298,13 +286,13 @@ if (!$dbconn) {
       titleBar ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
                     $GASMILE,$IMAGE,$GORD,$MORK);
       NewLIForm ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
-                    $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$RO,"",
+                    $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$SERDATE,$RO,"",
                     "","","","","");
     } else if (isset($EditRO)) {
       titleBar ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
                     $GASMILE,$IMAGE,$GORD,$MORK);
            NewLIForm ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
-                       $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$RO,"",
+                       $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$SERDATE,$RO,"",
                        "","","","","");
            echo "<center>";
            echo "<FORM METHOD='POST' ACTION='showhistory.php'>";
@@ -324,7 +312,7 @@ if (!$dbconn) {
            echo "</center>";
 		
            $today=date("dMY");
-           ShowHistory ($dbconn,$MORK,$RO,$DESC,$today,$ODO,$SID,$USERNAME);
+           ShowHistory ($dbconn,$MORK,$RO,$DESC,$today,$ODO,$SID,$USERNAME,$SERDATE);
  
     } else {
       // Ok the user is trying to create a brand new RO..lets check his input
@@ -334,10 +322,11 @@ $HOURS=$_REQUEST['HOURS'];
 $OPERATION=$_REQUEST['OPERATION'];
 $PART_NUMBER=$_REQUEST['PART_NUMBER'];
 $SOURCE=$_REQUEST['SOURCE'];
+//$SERDATE=$_REQUEST['SERDATE'];
 $NOTES=$_REQUEST['NOTES'];
-$date =  $_POST['Date'];
-$timestamp = date('Y-m-d H:i:s', strtotime($date));  
-$DATE_RO = $timestamp;
+//$date =  $_POST['Date'];
+//$timestamp = date('Y-m-d H:i:s', strtotime($date));  
+//$DATE_RO = $timestamp;
 
       if ( $COST=="" ) {
          if (!isset($UIErrors)) $UIErrors="";
@@ -384,10 +373,10 @@ $DATE_RO = $timestamp;
         echo "</b></center>";
         echo $UIErrors;
         NewLIForm ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
-                    $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$RO,$NOTES,
+                    $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$SERDATE,$RO,$NOTES,
                     $OPERATION,$SOURCE,$PART_NUMBER,$COST,$HOURS);
         $today=date("dMY");
-        ShowHistory ($dbconn,$MORK,$RO,$DESC,$today,$ODO,$SID,$USERNAME);
+        ShowHistory ($dbconn,$MORK,$RO,$DESC,$today,$ODO,$SID,$USERNAME, $SERDATE);
        } else {
         // OK. Insert this Line Item!
         $NOTES = preg_replace('#(http://www\.|http://)([\w-]+\.)([a-z]+\.)+([\w\?&=\-\./%]*)?#i',"<a href=\"$0\" target=\"_blank\">$0</a>",$NOTES);
@@ -423,7 +412,7 @@ $SRONEW=$SRONEWROW['cnt']+1;
            titleBar ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
                     $GASMILE,$IMAGE,$GORD,$MORK);
            NewLIForm ($SID,$USERNAME,$VIN,$YEAR,$MAKE,$MODEL,$COLOR,
-                       $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$RO,"",
+                       $GASMILE,$IMAGE,$GORD,$MORK,$ODO,$DESC,$SERDATE,$RO,"",
                        "","","","","");
            echo "<center>";
            echo "<FORM METHOD='POST' ACTION='showhistory.php'>";

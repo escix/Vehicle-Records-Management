@@ -1,5 +1,10 @@
 <?php
 session_start();
+
+if(!$_SESSION['user_ok'])
+{header ('location: /index.php');}
+else{
+
 //==========================================================================
 // showhistory.php
 //
@@ -158,13 +163,14 @@ if (!$dbconn) {
            // Show the Add line items for the first repair order
            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
            echo "<A href='addli.php?SID=$SID&USERNAME=$USERNAME";
-           echo "&VIN=$VIN&ODO=$ODOS[$key]&DESC=$DESCS[$key]&EditRO=1";
+           echo "&VIN=$VIN&SERDATE=$RODATES[$key]&ODO=$ODOS[$key]&DESC=$DESCS[$key]&EditRO=1";
            echo "&YEAR=$YEAR&MAKE=$MAKE&MODEL=$MODEL&COLOR=$COLOR&IMAGE=$IMAGE";
            echo "&GASMILE=$GASMILE&GORD=$GORD&MORK=$MORK&RO=$ROS[$key]'";
            echo ">[ Add Line Items To Repair Order ]</A>";
          } // if first row
          echo "</TD></TR>";
-         echo "<TR><TD><P class='header8'>Date: ";
+         echo "<TR><TD width=30%><P class='header8'>Date: ";
+         $RODATES[$key] = date("d M Y", strtotime($RODATES[$key]));
          echo "$RODATES[$key]</TD>";
          echo "<TD><p class='header8'>Odometer: ";
          echo number_format($ODOS[$key]);
@@ -177,13 +183,12 @@ if (!$dbconn) {
          $SROResult=$dbconn->query($SROSelect);
          echo "<TABLE WIDTH='95%'>";
          echo "<TR>";
-         echo "<TD class='header1'>Item</TD>";
-         echo "<TD class='header1'>Date</TD>";
-         echo "<TD class='header1'>Labor Operation</TD>";
-         echo "<TD class='header1'>Source</TD>";
-         echo "<TD class='header1'>Part Number</TD>";
-         echo "<TD class='header1'>Cost</TD>";
-         echo "<TD class='header1'>Hours</TD>";
+         echo "<TD width=5% class='header1'>Item</TD>";
+         echo "<TD width=25% class='header1'>Labor Operation</TD>";
+         echo "<TD width=20% class='header1'>Source</TD>";
+         echo "<TD width=20% class='header1'>Part Number</TD>";
+         echo "<TD width=10% class='header1'>Cost</TD>";
+         echo "<TD width=10% class='header1'>Hours</TD>";
          echo "</TR>";
          $TotalROCost=0;
          $TotalROHours=0;
@@ -210,8 +215,7 @@ if (!$dbconn) {
               echo "</noscript>";
            }
            echo "</TD><TD>";
-           echo $RTO[1];
-           echo "</TD><TD>";
+//           echo "</TD><TD>";
            echo $RTO[2];
            echo "</TD><TD>";
            echo $RTO[3];
@@ -227,7 +231,7 @@ if (!$dbconn) {
          } // while ($ROT=mysqli_fetch_row($SROResult))
          echo "</TABLE>";
          echo "<TABLE WIDTH='95%'><TR>";
-         echo "<TD class=header1>Total Cost: ";
+         echo "<TD width=30% class=header1>Total Cost: ";
          echo money_format('%n',$TotalROCost);
          echo "</TD>";
          echo "<TD class=header1>Total Hours: $TotalROHours</TD>";
@@ -268,7 +272,7 @@ if (!$dbconn) {
        echo "<TD>";
        echo money_format('%n',$TotalCost);
        echo "</TD></TR>";
-       echo "<TR class='header3'><TD>Total Miles driven</TD>";
+       echo "<TR class='header3'><TD>Total distance driven</TD>";
        echo "<TD>";
        if ($numROS==1) {
           echo "N/A";
@@ -333,7 +337,7 @@ footer($PHP_SELF,$adminemail);
   $endtime = $mtime;
   $totaltime = ($endtime - $starttime);
   echo "<br><br>This page was created in ".$totaltime." seconds";
-
+}
 ?>
 
 

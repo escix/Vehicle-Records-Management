@@ -22,13 +22,13 @@
 
 // Email of the applications administrator
 // ----------------------------------------------------------------
-$adminemail="admin@email.com";
+$adminemail="admin@admin.com";
 
 
 // Address(s) where you want to be mailed when someone registered
 // (comma seperated list if more than 1) 
 // ----------------------------------------------------------------
-$reg_email="admin@email.com";
+$reg_email="admin@admin.com";
 
 
 // Set the Long Field path for vehicle's picture storage
@@ -41,12 +41,12 @@ $LFPath="pics";
 
 // Organization name
 // ----------------------------------------------------------------
-$orgname="vst.website.com";
+$orgname="vst.com";
 
 
 // Org Homepage 
 // ----------------------------------------------------------------
-$homepage="http://vst.website.com";
+$homepage="http://vst.com";
 
 // Web path where tracker is installed
 // do not include your root path as defined in your webserver

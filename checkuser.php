@@ -73,6 +73,7 @@ if   ($SelectLoginResult){
        $dbconn->close();
       header("Location: index.php?rc=10");
       } elseif ($DBPASSWD==$PASSWD) {
+$_SESSION['user_ok']=1;
        $SID=md5(uniqid(rand(),TRUE));
        $SIDUpdate="update clients set SID='$SID',";
        $SIDUpdate.="LASTLOGIN=CURRENT_TIMESTAMP where USRNAME='$USERNAME';";

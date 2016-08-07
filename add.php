@@ -1,5 +1,14 @@
 <?php
 session_start();
+
+if(!$_SESSION['user_ok'])
+{header ('location: /index.php');}
+else{}
+
+
+
+
+
 //==========================================================================
 // add.php
 //
@@ -69,6 +78,15 @@ if (!$dbconn) {
      echo "<table cellpadding='5'>";
      echo "<tr><td rowspan='8'><img src='$IMAGE'></td></tr>";
      echo "<tr><td align='right'><B>";
+
+ 
+     echo "<tr><td align='right'><B>";
+     echo "Service Date</b></td><td>";
+     echo "<input name=SERDATE type=date size=7 maxlength=7>";
+     echo "</td></tr><tr><td align='right'><B>";
+
+
+
      echo "Odometer Reading</b></td><td>";
      echo "<input name=ODO type=text size=7 maxlength=7 value=$ODO>";
      echo "</td></tr><tr><td align='right'><B>";
@@ -76,7 +94,7 @@ if (!$dbconn) {
      echo "</b></td><td>";
      echo "<input name=DESC type=text size=60 maxlength=75 value=\"$DESC\">";
      echo "</td></tr>";
-     echo "<input name=VIN type=text value=$VIN>";
+     echo "<input name=VIN type=hidden value=$VIN>";
      echo "<input name=YEAR type=hidden value=$YEAR>";
      echo "<input name=MAKE type=hidden value=\"$MAKE\">";
      echo "<input name=MODEL type=hidden value=\"$MODEL\">";
@@ -119,6 +137,8 @@ if (!$dbconn) {
 
 $ODO=$_POST['ODO'];
 $DESC=$_POST['DESC'];
+$SERDATE=$_POST['SERDATE'];
+
       if ( $ODO=="" ) {
          if (!isset($UIErrors)) $UIErrors="";
          $UIErrors.="<b><ul><li><font color=#ff0000>";
@@ -160,8 +180,8 @@ $DESC=$_POST['DESC'];
         //Build the insert
         $MyInsert="insert into servicehist ";
         $MyInsert.="(repair_order,vehicle,service_date,mileage,service_short) values ('";
-        $MyInsert.=$NRONum."','".$VIN."',current_timestamp,".$ODO.",'".$DESC."');";
-//        echo $MyInsert;
+        $MyInsert.=$NRONum."','".$VIN."','".$SERDATE."','".$ODO."','".$DESC."');";
+        echo $MyInsert;
  
         // Perform the insert and redirect or die
         if ($dbconn->query($MyInsert)) {

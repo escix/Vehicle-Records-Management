@@ -1,4 +1,15 @@
 <?php 
+
+session_start();
+
+if(!$_SESSION['user_ok'])
+{header ('location: /index.php');}
+else{}
+
+
+
+
+
 //==========================================================================
 // main.php
 //
@@ -19,7 +30,7 @@
 //
 //==========================================================================
 
-session_start();
+
 
 
 
@@ -103,7 +114,7 @@ echo "<a href='logout.php?SID=$SID&USERNAME=$USERNAME'>Logout</a>";
  echo "</B></center>";
  $VehiclesSelect="select VIN,YEAR,MAKE,MODEL,COLOR,";
  $VehiclesSelect.="C_CREATE,ODOMORK,";
- $VehiclesSelect.="COSTPERMILE,MILESDRIVEN,TOTALSPENT,TOTALHOURS,rtrim(IMAGE),";
+ $VehiclesSelect.="COSTPERMILE,MILESDRIVEN,TOTALSPENT,TOTALHOURS,IMAGE,";
  $VehiclesSelect.="GASMILE,GASORDIESEL,AVG_MILES_PER_YEAR,EXAVG ";
  $VehiclesSelect.="from vehicles where ";
  $VehiclesSelect.="OWNER='$USERNAME' order by C_CREATE;";
@@ -177,7 +188,7 @@ mysqli_free_result($VehiclesResult);
      echo "<TD width='40%'>";
      echo "<TABLE border='2' width='100%' >";
      echo "<TR><TD width='70%' align='right'>";
-     echo "<p class='header8'><small>Cost Per Mile (cents/mile)</small></p></TD>";
+     echo "<p class='header8'><small>Cost per distance (cents/unit)</small></p></TD>";
      echo "<TD width='30%'><p class='header8'>";
      if ($CPMS[$y]=="") {
         echo "N/A";
@@ -204,7 +215,7 @@ mysqli_free_result($VehiclesResult);
      }
      echo "</p></TD></TR>";
      //echo "<TR><TD width='70%' align='right'>";
-     //echo "<p class='header8'><small>Total Miles Driven</small></p></TD>";
+     //echo "<p class='header8'><small>Total distance driven</small></p></TD>";
      //echo "<TD width='30%'><p class='header8'>";
      //if ($MILESDRIVENS[$y]=="") {
      //   echo "N/A";
@@ -213,7 +224,7 @@ mysqli_free_result($VehiclesResult);
      //}
      echo "</p></TD></TR>";
      echo "<TR><TD width='70%' align='right'>";
-     echo "<p class='header8'><small>Average Miles/Year";
+     echo "<p class='header8'><small>Average distance/Year";
      if ($ExtrapolatedAvg[$y]) echo " (Extrapolated)";
      echo "</small></p></TD>";
      echo "<TD width='30%'><p class='header8'>";
@@ -229,7 +240,7 @@ mysqli_free_result($VehiclesResult);
    echo "</TABLE>";
    echo "</CENTER>";
    echo "<BR>";
-   echo "<p class='header2' align='right'>Average Miles/Per Year driven for all Vehicles: ";
+   echo "<p class='header2' align='right'>Average Distance/Per Year driven for all Vehicles: ";
    echo number_format($TotalAMPY);
    echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
  } // if ($Vehicles==0) {

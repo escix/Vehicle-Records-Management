@@ -30,6 +30,7 @@ if (!$dbconn) {
 
 $LogoutUpdate="update clients set SID='LOGGEDOUT' where USRNAME='$USERNAME'";
 $dbconn->query($LogoutUpdate);
+session_destroy();
 $header="Location: ".$homepage.$webpath;
 header($header);
 

@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+if(!$_SESSION['user_ok'])
+{header ('location: /index.php');}
+else{}
+
+
+
 //==========================================================================
 // newvehicle.php
 //
@@ -29,7 +38,6 @@ if ( isset($_REQUEST['EDIT']) || isset($_REQUEST['ADDOREDIT'])) {
 <body>
 <?php
 
-session_start();
 
 //if (!isset($SID)) { $_SESSION['SID']=$_REQUEST['SID']; }
 $SID=$_REQUEST['SID'];
@@ -89,10 +97,10 @@ if (!$dbconn) {
   <tr><td align='right'><B>Color</B></td><td>
   <input name=COLOR type=text size=25 maxlength='25' value='<?php echo $COLOR?>'>
   </td></tr>
-  <tr><td align='right'><B>Gas Mileage</td><td></B>
+  <tr><td align='right'><B>Fuel Economy</td><td></B>
   <input name=GAS type=text size=5 value='<?php echo $GAS?>'>
-  <input type="radio" name="EORM" value="E" checked> Miles/Gallon
-  <input type="radio" name="EORM" value="M"> Litres/100 Kilometers</B>
+  <input type="radio" name="EORM" value="M" checked> Litres/100 Kilometers</B>
+  <input type="radio" name="EORM" value="E" > Miles/Gallon
   </td></tr>
   </table>
    <B>Vehicles Odometer is in </B>
@@ -262,7 +270,7 @@ $OLDIMG=$_POST['OLDIMG'];
              // This should convert whatever format it's in to max height 120
              // and make it a jpeg. Horray for ImageMagick!
  
-             $command="convert -scale 120 ".$_FILES['vehpic']['tmp_name']." ".$ImgLF;
+             $command="/usr/local/bin/convert -scale 120 ".$_FILES['vehpic']['tmp_name']." ".$ImgLF;
              shell_exec($command);
              //echo "going for unlink old[$OLDIMG]";
              if ($ADDOREDIT=="Edit Vehicle" && $OLDIMG!="pics/car.jpg") {
@@ -293,7 +301,7 @@ $OLDIMG=$_POST['OLDIMG'];
        // If metric convert litre/100km to miles/gallon for
        // storage
        // -----------------------------------------------------
-       if ($EORM=="M")  $GAS=round(235.214587266016/$GAS,1);
+//       if ($EORM=="M")  $GAS=round(235.214587266016/$GAS,1);
 
        // Do the insert or update
        // --------------------------
