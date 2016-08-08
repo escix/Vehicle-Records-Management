@@ -3,9 +3,9 @@
 
 session_start();
 
-if(!$_SESSION['user_ok'])
-{header ('location: /index.php');}
-else{}
+//if(!$_SESSION['user_ok'])
+//{header ('location: /index.php');}
+//else{}
 
 
 
