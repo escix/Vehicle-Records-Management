@@ -42,7 +42,7 @@
     } elseif (isset($rc) && $rc=="21") {
      echo "<B><CENTER><font color=#ff0000>Invalid Password</font></CENTER></B>";
     } elseif (isset($rc) && $rc=="14") {
-     echo "<B><CENTER><font color=#ff0000>Sorry. Nice try. You Must Logon First!</font></CENTER></B>";
+     echo "<B><CENTER><font color=#ff0000>Sorry. Nice try. You Must Login First!</font></CENTER></B>";
    }
    ?>   
    <form method=post action=checkuser.php>
