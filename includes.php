@@ -14,31 +14,11 @@
 //
 //==========================================================================
 
-//if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
-//if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
-//if (isset($_REQUEST['PASSWD'])) { $PASSWD=$_REQUEST['PASSWD'];} else { $PASSWD=""; }
-
-
-
-
-
-
 session_start();
 
-//if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
-//$_SESSION['SID']=$SID;
 $SID=$_SESSION['SID'];
-
-//if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
-//$_SESSION['USERNAME']=$USERNAME;
 $USERNAME=$_SESSION['USERNAME'];
-
-//if (isset($_REQUEST['PASSWD'])) { $PASSWD=$_REQUEST['PASSWD'];} else { $PASSWD=""; }
-//$_SESSION['PASSWD']=$PASSWD;
 $PASSWD=$_SESSION['PASSWD'];
-
-
-
 
 include_once("config.php");
 
@@ -72,35 +52,28 @@ $count = mysqli_num_rows($result);
 }
 
 
-
 function footer ($FROMLOC,$adminemail) {
   $FROMLOC=substr(substr($FROMLOC, -abs(strpos ($FROMLOC,".")) ),1);
   $VSTVERSION=getversion();
   echo "<BR>";
   echo "<TABLE width='100%'>";
   echo "<TR class='band'><TD>";
-  echo "<a href='mailto:$adminemail?subject=Question%20about%20Vehicle%20Service%20Tracker&body=From:%20$FROMLOC'>";
+  echo "<a href='mailto:$adminemail?subject=Question%20about%20Vehicle%20Records%20Manager&body=From:%20$FROMLOC'>";
   echo "<address>$adminemail</address></a>";
   echo "</TD><TD align='right'>";
-  echo "<B>Vehicle Service Tracker v$VSTVERSION</B>";
+  echo "<B>Vehicle Records Manager v$VSTVERSION</B>";
   echo "</TD></TR>";
   echo "</TABLE>";
 } // function footer
 
 
 function authuser ($dbconn,$user,$sid) {
- if ($user!="demo") { // always allow demo user
+// if ($user!="demo") { // always allow demo user
   $SelectSID="select rtrim(SID) from clients where USRNAME='$user';";
   $result=$dbconn->query($SelectSID);
   $Result=$result->fetch_row();
   $SelectedSID=$Result[0];
-//  if ( ($SelectedSID!=$sid) || !($sid) ) {
-//    $dbconn->close();
-//    header("Location: login.php?rc=14 $sid . $SelectedSID");
-//    die("sent back to login");
-//  } 
-  //die ("allowed");
- } // if demo user
+// } // if demo user
 } // function authuser
 
 

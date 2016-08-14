@@ -6,10 +6,6 @@ if(!$_SESSION['user_ok'])
 {header ('location: /index.php');}
 else{}
 
-
-
-
-
 //==========================================================================
 // main.php
 //
@@ -29,13 +25,6 @@ else{}
 //           - 23Feb2007Added Update Profile Link
 //
 //==========================================================================
-
-
-
-
-
-//if (isset($_REQUEST['SID'])) { $_SESSION['SID']=$_REQUEST['SID']; }
-//if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
 
 $SID=$_SESSION['SID'];
 $USERNAME=$_SESSION['USERNAME'];
@@ -90,10 +79,10 @@ if (!$dbconn) {
 
 <html>
  <head>
-  <title>Vehicle Service Tracker</title>
+  <title>Vehicle Records Manager</title>
  </head>
  <link rel='stylesheet' type='text/css' href='vst.css'>
- <center><p class='Header1'><B>Vehicle Service Tracker</B></p></center>
+ <center><p class='Header1'><B>Vehicle Records Manager</B></p></center>
  <body>
 <?php
  if (isset($LASTDATE) && $LASTDATE!="" && isset($LASTTIME) && isset($FIRST)) {
@@ -138,7 +127,7 @@ while ($rows=mysqli_fetch_assoc($VehiclesResult)) {
    $IMAGES[$Vehicles]=$rows[IMAGE];
    $GASMILES[$Vehicles]=$rows[GASMILE];
    $GORDS[$Vehicles]=$rows[GASORDIESEL];
-   $AMPYS[$Vehicles]=$rows[AVG_MILS_PER_YEAR];
+   $AMPYS[$Vehicles]=$rows[AVG_MILES_PER_YEAR];
    $ExtrapolatedAvg[$Vehicles]=$rows[EXAVG];
    $TotalAMPY=$TotalAMPY+$AMPYS[$Vehicles];
    $Vehicles++;
@@ -150,9 +139,6 @@ mysqli_free_result($VehiclesResult);
    echo "You have no vehicles. Add some!";
   } else {
 
-//echo $USERNAME;
-//echo $PASSWD;
-//echo $SID;
    echo "<CENTER>";
    echo "<TABLE WIDTH='90%' CELLPADDING=2 CELLSPACING=1 BORDER=0>\n";
 
@@ -179,6 +165,7 @@ mysqli_free_result($VehiclesResult);
      echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
      echo "<a href='".$EditVehicleURL."'>";
      echo "<small> [ edit vehicle ] </small></A>";
+     $CCREATES[$y]=date("d M Y",strtotime($CCREATES[$y]));
      echo "<BR>Vehicle Added: $CCREATES[$y] ";
      echo "<BR>";
 
@@ -202,7 +189,8 @@ mysqli_free_result($VehiclesResult);
      if ($TOTALSPENTS[$y]=="") {
         echo "N/A";
       } else {
-        echo money_format('%n',$TOTALSPENTS[$y]);
+
+        echo '$' . number_format($TOTALSPENTS[$y], 2);
      }
      echo "</p></TD></TR>";
      echo "<TR><TD width='70%' align='right'>";
@@ -214,14 +202,6 @@ mysqli_free_result($VehiclesResult);
         echo "$TOTALHOURS[$y]";
      }
      echo "</p></TD></TR>";
-     //echo "<TR><TD width='70%' align='right'>";
-     //echo "<p class='header8'><small>Total distance driven</small></p></TD>";
-     //echo "<TD width='30%'><p class='header8'>";
-     //if ($MILESDRIVENS[$y]=="") {
-     //   echo "N/A";
-     // } else {
-     //   echo number_format($MILESDRIVENS[$y]);
-     //}
      echo "</p></TD></TR>";
      echo "<TR><TD width='70%' align='right'>";
      echo "<p class='header8'><small>Average distance/Year";

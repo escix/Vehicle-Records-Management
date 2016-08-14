@@ -7,8 +7,6 @@ if(!$_SESSION['user_ok'])
 {header ('location: /index.php');}
 else{}
 
-
-
 //==========================================================================
 // addli.php
 //
@@ -230,9 +228,6 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME, $SERDA
       echo $NOTES;
       echo "');>[n]</a>\");";
       echo "</script>\n";
-
-
-      
       echo "<noscript>";
       $TMPURL="notes.php?SID=$SID&USERNAME=$USERNAME&INFO=";
       $TMPURL.=$NOTES;
@@ -266,9 +261,6 @@ function ShowHistory ($dbconn,$MORK,$RO,$DESC,$TDATE,$ODO,$SID,$USERNAME, $SERDA
 
 } // ShowHistory
 
-
-//if (isset($_REQUEST['SID'])) { $SID=$_REQUEST['SID']; } else { $SID=""; }
-//if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
 
 include_once("includes.php");
 
@@ -322,11 +314,7 @@ $HOURS=$_REQUEST['HOURS'];
 $OPERATION=$_REQUEST['OPERATION'];
 $PART_NUMBER=$_REQUEST['PART_NUMBER'];
 $SOURCE=$_REQUEST['SOURCE'];
-//$SERDATE=$_REQUEST['SERDATE'];
 $NOTES=$_REQUEST['NOTES'];
-//$date =  $_POST['Date'];
-//$timestamp = date('Y-m-d H:i:s', strtotime($date));  
-//$DATE_RO = $timestamp;
 
       if ( $COST=="" ) {
          if (!isset($UIErrors)) $UIErrors="";

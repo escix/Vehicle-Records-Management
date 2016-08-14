@@ -5,10 +5,6 @@ if(!$_SESSION['user_ok'])
 {header ('location: /index.php');}
 else{}
 
-
-
-
-
 //==========================================================================
 // add.php
 //
@@ -51,19 +47,6 @@ if (!$add){$add =$_REQUEST['add'];}
 if (!$RO){$RO =$_REQUEST['RO'];}
 
 
-//$SID=$_SESSION['SID'];
-//$USERNAME=$_SESSION['USERNAME'];
-//$VIN =$_POST['VIN'];
-//$MAKE =$_POST['MAKE'];
-//$MODEL =$_POST['MODEL'];
-//$COLOR =$_POST['COLOR'];
-//$YEAR =$_POST['YEAR'];
-//$MORK =$_POST['MORK'];
-//$GORD =$_POST['GORD'];
-//$IMAGE =$_POST['IMAGE'];
-//$GASMILE=$_POST['GASMILE'];
-//$add=$_POST['add'];
-
 $dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname);
 if (!$dbconn) {
    $a = "Mysql Connect Failed. MySQL might not be running";
@@ -78,15 +61,10 @@ if (!$dbconn) {
      echo "<table cellpadding='5'>";
      echo "<tr><td rowspan='8'><img src='$IMAGE'></td></tr>";
      echo "<tr><td align='right'><B>";
-
- 
      echo "<tr><td align='right'><B>";
      echo "Service Date</b></td><td>";
      echo "<input name=SERDATE type=date size=7 maxlength=7>";
      echo "</td></tr><tr><td align='right'><B>";
-
-
-
      echo "Odometer Reading</b></td><td>";
      echo "<input name=ODO type=text size=7 maxlength=7 value=$ODO>";
      echo "</td></tr><tr><td align='right'><B>";

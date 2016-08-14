@@ -23,14 +23,14 @@
 <html>
  <head>
   <title>
-   Vehicle Service Tracker :: VST Car repair tracker at <?php echo $orgname ?>
+   Vehicle Records Manager
   </title>
  </head>
  <link rel='stylesheet' type='text/css' href='vst.css'>
  <BODY>
    <H1>
   <CENTER>
-   <P CLASS='Header1'>Vehicle Service Tracker</P>
+   <P CLASS='Header1'>Vehicle Records Manager</P>
   </CENTER>
   </H1>
 
@@ -63,7 +63,6 @@
    <p>
    <CENTER><B><input type=submit value="Login" id='butt'></B></CENTER>
    </form>
-   <small><center><b>Try it! - Logon as demo/demo to see how it works.</b></center></small>
    <br>
 <br>
    <hr noshade size=5 width=90% >

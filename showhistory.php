@@ -32,7 +32,6 @@ else{
 <?php
 
 if (!$_SESSION['SID']){$SID=$_REQUEST['SID'];}
-//echo $SID;
 $USERNAME=$_SESSION['USERNAME'];
 $VIN =$_POST['VIN'];
 $MAKE =$_POST['MAKE'];
@@ -125,7 +124,7 @@ if (!$dbconn) {
     // Get this repair order's details
     // ------------------------------------------------------
     $ROSelect="select REPAIR_ORDER,SERVICE_DATE,MILEAGE,SERVICE_SHORT FROM ";
-    $ROSelect.="servicehist where VEHICLE='$VIN' ORDER BY MILEAGE DESC ";
+    $ROSelect.="servicehist where VEHICLE='$VIN' ORDER BY SERVICE_DATE DESC, MILEAGE DESC ";
     $ROResult=$dbconn->query($ROSelect);
     $numROS=0;
     while ($RORS=mysqli_fetch_row($ROResult)) {
@@ -232,7 +231,7 @@ if (!$dbconn) {
          echo "</TABLE>";
          echo "<TABLE WIDTH='95%'><TR>";
          echo "<TD width=30% class=header1>Total Cost: ";
-         echo money_format('%n',$TotalROCost);
+	 echo '$' . number_format($TotalROCost, 2);
          echo "</TD>";
          echo "<TD class=header1>Total Hours: $TotalROHours</TD>";
          echo "</TR></TABLE></CENTER>";
@@ -270,7 +269,7 @@ if (!$dbconn) {
        echo "<TD>$TotalHours</TD></TR>";
        echo "<TR class='header3'><TD>Total $ Spent For Maintaince</TD>";
        echo "<TD>";
-       echo money_format('%n',$TotalCost);
+       echo '$' . number_format($TotalCost, 2);
        echo "</TD></TR>";
        echo "<TR class='header3'><TD>Total distance driven</TD>";
        echo "<TD>";

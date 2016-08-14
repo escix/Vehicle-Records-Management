@@ -6,8 +6,6 @@ if(!$_SESSION['user_ok'])
 {header ('location: /index.php');}
 else{}
 
-
-
 //==========================================================================
 // newvehicle.php
 //
@@ -25,7 +23,6 @@ else{}
 //==========================================================================
 ?>
 
-
 <html>
 <?php 
 if ( isset($_REQUEST['EDIT']) || isset($_REQUEST['ADDOREDIT'])) {
@@ -39,20 +36,9 @@ if ( isset($_REQUEST['EDIT']) || isset($_REQUEST['ADDOREDIT'])) {
 <?php
 
 
-//if (!isset($SID)) { $_SESSION['SID']=$_REQUEST['SID']; }
 $SID=$_REQUEST['SID'];
-
-//if (isset($_REQUEST['USERNAME'])) { $USERNAME=$_REQUEST['USERNAME'];} else { $USERNAME=""; }
-//$_SESSION['USERNAME']=$USERNAME;
 $USERNAME=$_SESSION['USERNAME'];
-
-//if (isset($_REQUEST['PASSWD'])) { $PASSWD=$_REQUEST['PASSWD'];} else { $PASSWD=""; }
-//$_SESSION['PASSWD']=$PASSWD;
 $PASSWD=$_SESSION['PASSWD'];
-
-//echo $USERNAME;
-//echo $PASSWD ;
-//echo $SID;
 include_once("includes.php");
 
 $dbconn = mysqli_connect($my_host, $my_user, $dbpasswd, $dbname);
@@ -161,8 +147,6 @@ $GAS=$_POST['GAS'];
 $EORM=$_POST['EORM'];
 $MORK=$_POST['MORK'];
 $GORD=$_POST['GORD'];
-//$SID=$SID;
-//$USERNAME=$USERNAME;
 $OLDVIN=$_POST['OLDVIN'];
 $AorE=$_POST['AorE'];
 $OLDIMG=$_POST['OLDIMG'];

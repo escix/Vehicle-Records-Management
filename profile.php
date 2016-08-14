@@ -1,14 +1,5 @@
 <?php
-
-
 session_start();
-
-//if(!$_SESSION['user_ok'])
-//{header ('location: /index.php');}
-//else{}
-
-
-
 //==========================================================================
 // includes.php
 //
